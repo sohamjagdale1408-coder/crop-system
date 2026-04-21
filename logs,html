@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Activity Logs</h1>
+    <p class="page-subtitle">History of all farming activities</p>
+</div>
+
+<div class="card table-card">
+    {% if logs %}
+        <div class="table-responsive">
+            <table class="standard-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Crop</th>
+                        <th>Activity Type</th>
+                        <th>Notes</th>
+                        <th class="text-right">Cost</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for log in logs %}
+                        <tr>
+                            <td class="whitespace-nowrap">{{ log.log_date }}</td>
+                            <td><strong>{{ log.crop_name }}</strong></td>
+                            <td>
+                                <span class="badge badge-{{ log.log_type | lower }}">{{ log.log_type }}</span>
+                            </td>
+                            <td class="text-muted">{{ log.notes or '-' }}</td>
+                            <td class="text-right font-medium">${{ "%.2f"|format(log.cost) }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="empty-state small">
+            <div class="empty-icon">
+                <i class="ph ph-clipboard-text"></i>
+            </div>
+            <h2>No logs found</h2>
+            <p>You haven't recorded any activities yet.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

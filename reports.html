@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Financial Reports</h1>
+    <p class="page-subtitle">Analyze your farming expenses</p>
+</div>
+
+<div class="stats-overview">
+    <div class="stat-card total-cost">
+        <div class="stat-icon">
+            <i class="ph ph-currency-dollar"></i>
+        </div>
+        <div class="stat-content">
+            <h3>Total Expenditure</h3>
+            <p class="stat-value">${{ "%.2f"|format(total_overall) }}</p>
+        </div>
+    </div>
+</div>
+
+<div class="reports-grid">
+    <div class="card">
+        <div class="card-header">
+            <h2>Cost by Crop</h2>
+        </div>
+        <div class="card-body">
+            {% if crop_costs %}
+                <table class="standard-table compact">
+                    <thead>
+                        <tr>
+                            <th>Crop Name</th>
+                            <th class="text-right">Total Cost</th>
+                            <th class="text-right">% of Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in crop_costs %}
+                            <tr>
+                                <td><strong>{{ row.name }}</strong></td>
+                                <td class="text-right">${{ "%.2f"|format(row.total_cost or 0) }}</td>
+                                <td class="text-right">
+                                    {% if total_overall > 0 %}
+                                        {{ "%.1f"|format(((row.total_cost or 0) / total_overall) * 100) }}%
+                                    {% else %}
+                                        0%
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="text-muted text-center py-4">No cost data available.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h2>Cost by Activity Type</h2>
+        </div>
+        <div class="card-body">
+            {% if type_costs %}
+                <div class="css-bar-chart">
+                    {% for row in type_costs %}
+                        {% set percent = ((row.total_cost or 0) / total_overall) * 100 if total_overall > 0 else 0 %}
+                        <div class="bar-row">
+                            <div class="bar-label">
+                                <span>{{ row.log_type }}</span>
+                                <span>${{ "%.2f"|format(row.total_cost or 0) }}</span>
+                            </div>
+                            <div class="bar-track">
+                                <div class="bar-fill bg-{{ row.log_type | lower }}" style="width: {{ percent }}%;"></div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-muted text-center py-4">No cost data available.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

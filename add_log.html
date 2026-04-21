@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Add Log Entry</h1>
+    <p class="page-subtitle">Record activities for {{ crop.name }}</p>
+</div>
+
+<div class="form-card">
+    <form method="post" class="standard-form">
+        <div class="form-group">
+            <label for="log_type">Activity Type</label>
+            <div class="select-wrapper">
+                <select name="log_type" id="log_type" required>
+                    <option value="" disabled selected>Select activity type...</option>
+                    <option value="Fertilizer">Fertilizer</option>
+                    <option value="Water">Water/Irrigation</option>
+                    <option value="Pesticide">Pesticide/Herbicide</option>
+                    <option value="Labor">Labor</option>
+                    <option value="Harvest">Harvest</option>
+                    <option value="Other">Other</option>
+                </select>
+                <i class="ph ph-caret-down select-icon"></i>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="cost">Cost ($)</label>
+            <div class="input-with-icon">
+                <i class="ph ph-currency-dollar"></i>
+                <input type="number" name="cost" id="cost" step="0.01" min="0" placeholder="0.00" required>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="notes">Notes (Optional)</label>
+            <textarea name="notes" id="notes" rows="4" placeholder="Add any details about this activity..."></textarea>
+        </div>
+        
+        <div class="form-actions">
+            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Cancel</a>
+            <button type="submit" class="btn btn-primary">Save Log Entry</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

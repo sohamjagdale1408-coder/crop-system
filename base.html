@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriSmart</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Phosphor icons for beautiful icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+    <div class="app-container">
+        {% if g.user %}
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="ph-fill ph-leaf"></i> AgriSmart</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="{{ url_for('dashboard') }}" class="nav-item {% if request.endpoint == 'dashboard' %}active{% endif %}">
+                    <i class="ph ph-squares-four"></i> Dashboard
+                </a>
+                <a href="{{ url_for('add_crop') }}" class="nav-item {% if request.endpoint == 'add_crop' %}active{% endif %}">
+                    <i class="ph ph-plant"></i> Add Crop
+                </a>
+                <a href="{{ url_for('logs') }}" class="nav-item {% if request.endpoint == 'logs' or request.endpoint == 'add_log' %}active{% endif %}">
+                    <i class="ph ph-clipboard-text"></i> Logs
+                </a>
+                <a href="{{ url_for('reports') }}" class="nav-item {% if request.endpoint == 'reports' %}active{% endif %}">
+                    <i class="ph ph-chart-bar"></i> Reports
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <i class="ph ph-user-circle"></i> {{ g.user['username'] }}
+                </div>
+                <a href="{{ url_for('logout') }}" class="nav-item logout">
+                    <i class="ph ph-sign-out"></i> Logout
+                </a>
+            </div>
+        </aside>
+        {% endif %}
+
+        <main class="main-content {% if not g.user %}full-width{% endif %}">
+            <div class="flash-messages">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="flash {{ category }}">
+                                {{ message }}
+                                <button class="close-flash"><i class="ph ph-x"></i></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
+            
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Add New Crop</h1>
+    <p class="page-subtitle">Start tracking a new crop's progress</p>
+</div>
+
+<div class="form-card">
+    <form method="post" class="standard-form">
+        <div class="form-group">
+            <label for="name">Crop Name/Identifier</label>
+            <input type="text" name="name" id="name" placeholder="e.g. North Field Wheat 2026" required>
+            <small class="help-text">Give your crop a unique name to easily identify it.</small>
+        </div>
+        
+        <div class="form-group">
+            <label for="grain_type_id">Grain Type</label>
+            <div class="select-wrapper">
+                <select name="grain_type_id" id="grain_type_id" required>
+                    <option value="" disabled selected>Select a grain type...</option>
+                    {% for type in grain_types %}
+                        <option value="{{ type.id }}">{{ type.name }} (Est. {{ type.default_days_to_harvest }} days)</option>
+                    {% endfor %}
+                </select>
+                <i class="ph ph-caret-down select-icon"></i>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="planted_date">Planted Date</label>
+            <input type="date" name="planted_date" id="planted_date" required>
+        </div>
+        
+        <div class="form-actions">
+            <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Cancel</a>
+            <button type="submit" class="btn btn-primary">Save Crop</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    document.getElementById('planted_date').valueAsDate = new Date();
+</script>
+{% endblock %}
